@@ -16,6 +16,20 @@ export const InflationSimulator = () => {
     const [currentLoss, setCurrentLoss] = useState<number>(0);
     const [lossPercent, setLossPercent] = useState<number>(0);
     const [thermoState, setThermoState] = useState<ThermometerState>('estable');
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch official inflation from INDEC (via api/inflation)
+        fetch('/api/inflation')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.annualRate) {
+                    setInflationRate(data.annualRate);
+                }
+                setIsLoading(false);
+            })
+            .catch(() => setIsLoading(false));
+    }, []);
 
     useEffect(() => {
         // Math Logic for Instant 60fps UI Response
