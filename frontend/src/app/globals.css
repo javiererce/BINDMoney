@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0B0F19;
+  /* Blue Automation Dark background */
+  --foreground: #ffffff;
+  --primary: #00D4FF;
+  --secondary: #3B82F6;
+  /* Un azul más profesional en lugar del morado agresivo */
+  --accent: #FF3B3B;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  min-height: 100vh;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+}
+
+.glow-primary {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(255, 59, 59, 0.4);
+}
