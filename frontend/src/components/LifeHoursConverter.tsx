@@ -82,7 +82,7 @@ export const LifeHoursConverter = () => {
     }, [income, weeklyHours, purchaseAmount, selectedInvest]);
 
     return (
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="max-w-3xl mx-auto">
             {/* Inputs */}
             <Card className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
@@ -95,8 +95,8 @@ export const LifeHoursConverter = () => {
                         <label className="block text-sm font-medium text-gray-400 mb-1">Sueldo Mensual (ARS)</label>
                         <input
                             type="number"
-                            value={income}
-                            onChange={(e) => setIncome(Number(e.target.value))}
+                            value={income || ''}
+                            onChange={(e) => setIncome(e.target.value === '' ? 0 : Number(e.target.value))}
                             placeholder="Ej: 1000000"
                             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--secondary)] transition-colors appearance-none"
                         />
@@ -105,12 +105,12 @@ export const LifeHoursConverter = () => {
                         <label className="block text-sm font-medium text-gray-400 mb-1">Horas Trabajadas (Semana)</label>
                         <input
                             type="number"
-                            value={weeklyHours}
-                            onChange={(e) => setWeeklyHours(Number(e.target.value))}
+                            value={weeklyHours || ''}
+                            onChange={(e) => setWeeklyHours(e.target.value === '' ? 0 : Number(e.target.value))}
                             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--secondary)] transition-colors appearance-none"
                         />
                         <p className="text-xs text-gray-500 mt-2">
-                            Tu valor hora estimado: <span className="text-[var(--secondary)] font-bold">${hourlyRate.toFixed(2)}</span>
+                            Tu valor hora estimado: <span className="text-[var(--secondary)] font-bold">${hourlyRate.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                         </p>
                     </div>
                 </div>
@@ -135,9 +135,9 @@ export const LifeHoursConverter = () => {
                     </label>
                     <input
                         type="number"
-                        value={purchaseAmount}
+                        value={purchaseAmount || ''}
                         disabled={selectedInvest.id !== 'fci'}
-                        onChange={(e) => setPurchaseAmount(Number(e.target.value))}
+                        onChange={(e) => setPurchaseAmount(e.target.value === '' ? 0 : Number(e.target.value))}
                         placeholder="Ej: 150000"
                         className={`w-full bg-white/5 border-2 border-[var(--secondary)]/30 rounded-lg px-4 py-4 text-white font-bold text-xl focus:outline-none focus:border-[var(--secondary)] transition-colors appearance-none ${selectedInvest.id !== 'fci' ? 'opacity-50 cursor-not-allowed' : ''}`}
                     />
@@ -146,6 +146,39 @@ export const LifeHoursConverter = () => {
                             El valor de la compra se bloqueó y se ajustó automáticamente al precio de 1 {selectedInvest.name}.
                         </p>
                     )}
+                </div>
+
+                {/* Resultados Visuales Integrados (Movidos aquí por petición del usuario) */}
+                <div className="mt-8 p-6 bg-black/20 rounded-2xl border border-[var(--secondary)]/20 text-center relative overflow-hidden">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[var(--secondary)]/5 rounded-full blur-3xl -z-10" />
+
+                    <div className="flex flex-col items-center justify-center space-y-4">
+                        <Clock className="h-12 w-12 text-[var(--secondary)] mb-2 glow-secondary" />
+                        <h4 className="text-xl font-bold text-white">Esta compra equivale a</h4>
+
+                        <AnimatePresence mode="popLayout">
+                            <motion.div
+                                key={hoursNeeded}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--secondary)] to-[var(--primary)]"
+                            >
+                                {hoursNeeded.toFixed(1)} <span className="text-2xl">horas</span>
+                            </motion.div>
+                        </AnimatePresence>
+                        <p className="text-gray-400 text-sm">de tu vida trabajando.</p>
+                    </div>
+
+                    <div className="w-full grid grid-cols-2 gap-4 mt-6">
+                        <div className="bg-black/40 rounded-xl p-3 border border-white/5">
+                            <p className="text-xs text-gray-400 mb-1">Días Laborales</p>
+                            <p className="text-xl font-bold text-white">{daysNeeded.toFixed(1)} días</p>
+                        </div>
+                        <div className="bg-black/40 rounded-xl p-3 border border-[var(--accent)]/20">
+                            <p className="text-xs text-[var(--accent)] mb-1">Impacto Mensual</p>
+                            <p className="text-xl font-bold text-white">{incomePercent.toFixed(1)}%</p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Selector de Instrumento de Inversión */}
@@ -198,44 +231,7 @@ export const LifeHoursConverter = () => {
                 </p>
             </Card>
 
-            {/* Resultados Visuales */}
-            <Card glow="secondary" className="flex flex-col items-center justify-center text-center p-8 relative overflow-hidden">
-                {/* Decorative background circle */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[var(--secondary)]/10 rounded-full blur-3xl -z-10" />
-
-                <Clock className="h-16 w-16 text-[var(--secondary)] mb-6 glow-secondary" />
-
-                <h3 className="text-2xl font-bold text-white mb-2">Esta compra equivale a</h3>
-
-                <div className="my-8 flex flex-col items-center justify-center space-y-4">
-                    <AnimatePresence mode="popLayout">
-                        <motion.div
-                            key={hoursNeeded}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--secondary)] to-[var(--primary)]"
-                        >
-                            {hoursNeeded.toFixed(1)} <span className="text-3xl">horas</span>
-                        </motion.div>
-                    </AnimatePresence>
-                    <p className="text-gray-400 text-lg">de tu vida trabajando.</p>
-                </div>
-
-                <div className="w-full grid grid-cols-2 gap-4 mt-4">
-                    <div className="bg-black/40 rounded-xl p-4 border border-white/5">
-                        <p className="text-sm text-gray-400 mb-1">Días Laborales</p>
-                        <p className="text-2xl font-bold text-white">{daysNeeded.toFixed(1)} días</p>
-                    </div>
-                    <div className="bg-black/40 rounded-xl p-4 border border-[var(--accent)]/20">
-                        <p className="text-sm text-[var(--accent)] mb-1">Impacto Mensual</p>
-                        <p className="text-2xl font-bold text-white">{incomePercent.toFixed(1)}%</p>
-                    </div>
-                </div>
-
-                <p className="mt-8 text-white/70 italic text-sm">
-                    "¿Realmente vale la pena gastar {daysNeeded.toFixed(1)} días de tu tiempo por esto?"
-                </p>
-            </Card>
+            {/* Eliminado el segundo card lateral para un flujo vertical más limpio solicitado */}
         </div>
     );
 };

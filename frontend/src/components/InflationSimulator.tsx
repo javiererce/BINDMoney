@@ -75,8 +75,8 @@ export const InflationSimulator = () => {
                         <label className="block text-sm font-medium text-gray-400 mb-1">Ingreso Mensual (ARS)</label>
                         <input
                             type="number"
-                            value={income}
-                            onChange={(e) => setIncome(Number(e.target.value))}
+                            value={income || ''}
+                            onChange={(e) => setIncome(e.target.value === '' ? 0 : Number(e.target.value))}
                             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--primary)] transition-colors"
                         />
                     </div>
@@ -84,8 +84,8 @@ export const InflationSimulator = () => {
                         <label className="block text-sm font-medium text-gray-400 mb-1">Gastos Fijos (ARS)</label>
                         <input
                             type="number"
-                            value={fixedExpenses}
-                            onChange={(e) => setFixedExpenses(Number(e.target.value))}
+                            value={fixedExpenses || ''}
+                            onChange={(e) => setFixedExpenses(e.target.value === '' ? 0 : Number(e.target.value))}
                             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--primary)] transition-colors"
                         />
                     </div>
@@ -93,25 +93,22 @@ export const InflationSimulator = () => {
                         <label className="block text-sm font-medium text-gray-400 mb-1">Gastos Variables (ARS)</label>
                         <input
                             type="number"
-                            value={variableExpenses}
-                            onChange={(e) => setVariableExpenses(Number(e.target.value))}
+                            value={variableExpenses || ''}
+                            onChange={(e) => setVariableExpenses(e.target.value === '' ? 0 : Number(e.target.value))}
                             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--primary)] transition-colors"
                         />
                     </div>
                     <div>
-                        <label className="flex justify-between text-sm font-medium text-gray-400 mb-1">
+                        <label className="flex justify-between text-sm font-medium text-gray-400 mb-3">
                             <span>Inflación Anual Estimada</span>
-                            <span className="text-[var(--accent)] font-bold">{inflationRate}%</span>
+                            <div className="flex flex-col items-end">
+                                <span className="text-[var(--accent)] font-bold text-lg">{inflationRate}%</span>
+                                <span className="text-[10px] text-gray-500 uppercase tracking-wider">Dato Oficial INDEC</span>
+                            </div>
                         </label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="300"
-                            step="5"
-                            value={inflationRate}
-                            onChange={(e) => setInflationRate(Number(e.target.value))}
-                            className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[var(--accent)]"
-                        />
+                        <div className="p-3 bg-[var(--accent)]/5 border border-[var(--accent)]/20 rounded-xl text-xs text-gray-400 leading-relaxed italic">
+                            El valor de inflación se ha fijado según el último reporte oficial del INDEC para garantizar proyecciones precisas.
+                        </div>
                     </div>
                 </div>
             </Card>
