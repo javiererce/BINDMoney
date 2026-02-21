@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card } from '@/components/ui/Card';
-import { ArrowRight, TrendingDown, Clock, ShieldAlert } from 'lucide-react';
+import { ArrowRight, TrendingDown, Clock, ShieldAlert, Coins } from 'lucide-react';
 import { InflationSimulator } from '@/components/InflationSimulator';
 import { LifeHoursConverter } from '@/components/LifeHoursConverter';
+import { DollarDashboard } from '@/components/DollarDashboard';
 
 export default function Home() {
   return (
@@ -24,7 +25,11 @@ export default function Home() {
           </a>
           <a href="#converter" className="group glass-panel hover:!bg-white/10 text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all">
             Calcular Horas de Vida
-            <Clock />
+            <Clock className="h-5 w-5" />
+          </a>
+          <a href="#dollars" className="group glass-panel hover:!bg-[var(--accent)]/10 text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all">
+            Cotizaciones Live
+            <Coins className="h-5 w-5 text-[var(--accent)]" />
           </a>
         </div>
       </section>
@@ -57,13 +62,21 @@ export default function Home() {
       </section>
 
       {/* Simulators Integration */}
-      <section id="simulator" className="mb-32">
-        <h2 className="text-4xl font-bold text-center mb-12 text-white">Simulador de Inflación</h2>
+      <section id="simulator" className="mb-32 pt-16">
+        <h2 className="text-4xl font-black text-center mb-12 text-white italic tracking-tighter uppercase">
+          Simulador de <span className="text-[var(--primary)]">Inflación</span>
+        </h2>
         <InflationSimulator />
       </section>
 
-      <section id="converter" className="mb-10">
-        <h2 className="text-4xl font-bold text-center mb-12 text-white">Conversor a Horas de Vida</h2>
+      <section id="dollars" className="mb-32 pt-16">
+        <DollarDashboard />
+      </section>
+
+      <section id="converter" className="mb-10 pt-16">
+        <h2 className="text-4xl font-black text-center mb-12 text-white italic tracking-tighter uppercase">
+          Conversor a <span className="text-[var(--secondary)]">Horas de Vida</span>
+        </h2>
         <LifeHoursConverter />
       </section>
     </div>
