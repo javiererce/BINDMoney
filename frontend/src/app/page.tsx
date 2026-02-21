@@ -62,22 +62,15 @@ export default function Home() {
       </section>
 
       {/* Simulators Integration */}
-      <section id="simulator" className="mb-32 pt-16">
-        <h2 className="text-4xl font-black text-center mb-12 text-white italic tracking-tighter uppercase">
-          Simulador de <span className="text-[var(--primary)]">Inflación</span>
-        </h2>
-        <InflationSimulator />
-      </section>
-
-      <section id="dollars" className="mb-32 pt-16">
-        <DollarDashboard />
-      </section>
-
-      <section id="converter" className="mb-10 pt-16">
+      <section id="converter" className="mb-32 pt-16">
         <h2 className="text-4xl font-black text-center mb-12 text-white italic tracking-tighter uppercase">
           Conversor a <span className="text-[var(--secondary)]">Horas de Vida</span>
         </h2>
         <LifeHoursConverter />
+      </section>
+
+      <section id="dollars" className="mb-32 pt-16">
+        <DollarDashboard />
       </section>
     </div>
   );
