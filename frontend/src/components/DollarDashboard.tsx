@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/Card';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Clock, Building2, Banknote, CreditCard, Coins, Landmark } from 'lucide-react';
 
@@ -12,6 +11,7 @@ interface DollarRate {
     venta: number;
     fechaActualizacion: string;
     variacion?: number;
+    logo?: string;
 }
 
 const DollarCard = ({ rate, icon: Icon }: { rate: DollarRate; icon: any }) => {
@@ -30,8 +30,12 @@ const DollarCard = ({ rate, icon: Icon }: { rate: DollarRate; icon: any }) => {
             <div className="relative bg-[#0b111a] border border-white/5 rounded-2xl p-5 overflow-hidden">
                 <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-white/5 rounded-xl border border-white/10">
-                            <Icon className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
+                        <div className="relative p-2 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center w-12 h-12 overflow-hidden">
+                            {rate.logo ? (
+                                <img src={rate.logo} alt={rate.nombre} className="w-full h-full object-contain" />
+                            ) : (
+                                <Icon className="h-6 w-6 text-gray-400 group-hover:text-white transition-colors" />
+                            )}
                         </div>
                         <div>
                             <h4 className="font-bold text-white text-lg leading-tight">{rate.nombre}</h4>
@@ -66,7 +70,6 @@ const DollarCard = ({ rate, icon: Icon }: { rate: DollarRate; icon: any }) => {
                     </div>
                 </div>
 
-                {/* Micro-sparkline decoration or spread indicator */}
                 <div className="mt-4 pt-3 border-t border-white/5 flex justify-between items-center">
                     <span className="text-[9px] text-gray-600 uppercase font-bold tracking-tighter">Spread: ${(rate.venta - rate.compra).toFixed(2)}</span>
                     <div className="flex gap-1">
@@ -84,19 +87,59 @@ export const DollarDashboard = () => {
     const [rates, setRates] = useState<DollarRate[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const houseLogos: Record<string, string> = {
+        'blue': 'https://raw.githubusercontent.com/fede-rodriguez/dolarbot/master/assets/dolar_blue.png',
+        'bolsa': 'https://raw.githubusercontent.com/fede-rodriguez/dolarbot/master/assets/dolar_mep.png',
+        'contadoconliqui': 'https://raw.githubusercontent.com/fede-rodriguez/dolarbot/master/assets/dolar_ccl.png',
+        'buenbit': 'https://buenbit-assets.s3.us-east-1.amazonaws.com/87ba33cb.svg',
+    };
+
     useEffect(() => {
         const fetchRates = async () => {
             try {
-                const res = await fetch('https://dolarapi.com/v1/dolares');
-                const data = await res.json();
+                // Fetch DolarAPI
+                const resDolarApi = await fetch('https://dolarapi.com/v1/dolares');
+                const dataDolarApi = await resDolarApi.json();
 
-                // Priorizamos los que el usuario suele ver más
-                const priorityOrder = ['blue', 'bolsa', 'contadoconliqui', 'cripto', 'oficial', 'tarjeta'];
-                const sortedData = data.sort((a: any, b: any) => {
-                    return priorityOrder.indexOf(a.casa) - priorityOrder.indexOf(b.casa);
+                // Fetch Buenbit (Ticker DAI/ARS as reference for Crypto Dollar)
+                let buenbitRate: DollarRate | null = null;
+                try {
+                    const resBuenbit = await fetch('https://be.buenbit.com/api/market/tickers/');
+                    const dataBuenbit = await resBuenbit.json();
+                    const daiArs = dataBuenbit.object.daiars;
+                    if (daiArs) {
+                        buenbitRate = {
+                            casa: 'buenbit',
+                            nombre: 'Dólar Buenbit',
+                            compra: parseFloat(daiArs.purchase_price),
+                            venta: parseFloat(daiArs.selling_price),
+                            fechaActualizacion: new Date().toISOString(),
+                            logo: houseLogos['buenbit']
+                        };
+                    }
+                } catch (e) {
+                    console.error("Error fetching Buenbit:", e);
+                }
+
+                // Combinar y mapear logos
+                let combinedRates: DollarRate[] = dataDolarApi.map((rate: any) => ({
+                    ...rate,
+                    logo: houseLogos[rate.casa] || null
+                }));
+
+                if (buenbitRate) {
+                    combinedRates.push(buenbitRate);
+                }
+
+                // Priorizamos el orden
+                const priorityOrder = ['blue', 'bolsa', 'contadoconliqui', 'buenbit', 'cripto', 'oficial', 'tarjeta'];
+                combinedRates.sort((a, b) => {
+                    const idxA = priorityOrder.indexOf(a.casa);
+                    const idxB = priorityOrder.indexOf(b.casa);
+                    return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
                 });
 
-                setRates(sortedData);
+                setRates(combinedRates);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching dollars:", error);
@@ -105,7 +148,7 @@ export const DollarDashboard = () => {
         };
 
         fetchRates();
-        const interval = setInterval(fetchRates, 60000); // Refresh every minute
+        const interval = setInterval(fetchRates, 60000);
         return () => clearInterval(interval);
     }, []);
 
@@ -117,6 +160,7 @@ export const DollarDashboard = () => {
             case 'contadoconliqui': return Coins;
             case 'tarjeta': return CreditCard;
             case 'cripto': return Coins;
+            case 'buenbit': return Coins;
             default: return Banknote;
         }
     };
@@ -132,16 +176,19 @@ export const DollarDashboard = () => {
     return (
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                    <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-2">
-                        Mercado de Divisas <span className="text-[var(--primary)] text-shadow">Real-Time</span>
-                    </h2>
-                    <p className="text-gray-400 text-sm max-w-xl">
-                        Cotizaciones actualizadas minuto a minuto desde fuentes oficiales y mercados libres.
-                        Diseñado para tomar decisiones financieras inteligentes.
-                    </p>
+                <div className="flex items-center gap-4">
+                    <img src="https://www.dolarito.ar/_next/static/media/logo_circular.ea6742b3.svg" alt="Dolarito" className="h-12 w-12 hidden md:block" />
+                    <div>
+                        <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-2">
+                            Mercado de Divisas <span className="text-[var(--primary)] text-shadow">Real-Time</span>
+                        </h2>
+                        <p className="text-gray-400 text-sm max-w-xl">
+                            Cotizaciones integradas de <span className="text-white font-bold">Dolarito</span>, <span className="text-[var(--primary)] font-bold">Buenbit</span> y el mercado oficial.
+                            Datos sincronizados minuto a minuto.
+                        </p>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full self-start md:self-end">
                     <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                     <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Conexión Live</span>
                 </div>
