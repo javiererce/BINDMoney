@@ -12,25 +12,25 @@ const getStateConfig = (state: ThermometerState) => {
     switch (state) {
         case 'estable':
             return {
-                color: '#10b981', // Verde
+                color: '#3BC371', // Green
                 message: 'Tu dinero mantiene su valor.',
                 height: '20%'
             };
         case 'moderada':
             return {
-                color: '#f59e0b', // Amarillo
+                color: '#9B66D9', // Purple
                 message: 'Erosión moderada del poder adquisitivo.',
                 height: '50%'
             };
         case 'severa':
             return {
-                color: '#ef4444', // Rojo
+                color: '#E18DC4', // Pink
                 message: 'Pérdida severa de ingresos reales.',
                 height: '80%'
             };
         case 'critico':
             return {
-                color: '#FF3B3B', // Rojo Alerta intenso
+                color: '#FF3B3B', // Alert Red
                 message: `¡ALERTA! La inflación está devorando tu sueldo.`,
                 height: '100%'
             };
@@ -42,7 +42,7 @@ export const Thermometer: React.FC<ThermometerProps> = ({ state, purchasingPower
 
     return (
         <div className="flex flex-col items-center justify-center h-full p-4 w-full">
-            <div className="relative w-16 h-64 bg-[#0B0F1A]/80 border border-white/20 rounded-full flex items-end justify-center p-2 backdrop-blur-md overflow-hidden shadow-inner">
+            <div className="relative w-16 h-64 bg-[#161616] border border-white/5 rounded-full flex items-end justify-center p-2 backdrop-blur-md overflow-hidden shadow-inner">
                 {/* Glow de fondo */}
                 <div
                     className="absolute inset-0 opacity-20 transition-opacity duration-1000"

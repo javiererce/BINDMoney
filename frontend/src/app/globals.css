@@ -1,15 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0B0F19;
-  /* Blue Automation Dark background */
+  --background: #0E0E0E;
+  /* Buenbit Deep Dark */
   --foreground: #ffffff;
-  --primary: #00D4FF;
-  --secondary: #3B82F6;
-  /* Un azul más profesional en lugar del morado agresivo */
-  --accent: #FF3B3B;
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --primary: #E18DC4;
+  /* Buenbit Pink */
+  --secondary: #9B66D9;
+  /* Buenbit Purple */
+  --accent: #3BC371;
+  /* Buenbit Success Green */
+  --neutral: #161616;
+  /* Card Surface */
+  --glass-bg: rgba(22, 22, 22, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.05);
 }
 
 @theme inline {

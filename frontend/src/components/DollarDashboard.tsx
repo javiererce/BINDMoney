@@ -26,11 +26,11 @@ const DollarCard = ({ rate, icon: Icon }: { rate: DollarRate; icon: any }) => {
             whileHover={{ y: -5 }}
             className="group relative"
         >
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500" />
-            <div className="relative bg-[#0b111a] border border-white/5 rounded-2xl p-5 overflow-hidden">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] rounded-[2rem] blur opacity-0 group-hover:opacity-10 transition duration-500" />
+            <div className="relative bg-[#161616] border border-white/5 rounded-[2rem] p-6 overflow-hidden">
                 <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="relative p-2 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center w-12 h-12 overflow-hidden">
+                        <div className="relative p-2 bg-black/20 rounded-2xl border border-white/5 flex items-center justify-center w-14 h-14 overflow-hidden">
                             {rate.logo ? (
                                 <img src={rate.logo} alt={rate.nombre} className="w-full h-full object-contain" />
                             ) : (
@@ -57,14 +57,14 @@ const DollarCard = ({ rate, icon: Icon }: { rate: DollarRate; icon: any }) => {
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Vendé (Compra)</p>
+                        <p className="text-[10px] text-gray-600 uppercase font-black tracking-widest">Vendé (Compra)</p>
                         <p className="text-2xl font-black text-white italic tabular-nums">
                             ${rate.compra.toLocaleString('es-AR')}
                         </p>
                     </div>
                     <div className="space-y-1 border-l border-white/5 pl-4">
-                        <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Comprá (Venta)</p>
-                        <p className="text-2xl font-black text-emerald-400 italic tabular-nums glow-emerald-text">
+                        <p className="text-[10px] text-gray-600 uppercase font-black tracking-widest">Comprá (Venta)</p>
+                        <p className="text-2xl font-black text-[var(--primary)] italic tabular-nums">
                             ${rate.venta.toLocaleString('es-AR')}
                         </p>
                     </div>
@@ -176,21 +176,22 @@ export const DollarDashboard = () => {
     return (
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div className="flex items-center gap-4">
-                    <img src="https://www.dolarito.ar/_next/static/media/logo_circular.ea6742b3.svg" alt="Dolarito" className="h-12 w-12 hidden md:block" />
+                <div className="flex items-center gap-5">
+                    <div className="p-3 bg-white/5 rounded-[2rem] border border-white/5">
+                        <img src="https://www.dolarito.ar/_next/static/media/logo_circular.ea6742b3.svg" alt="Dolarito" className="h-10 w-10" />
+                    </div>
                     <div>
                         <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-2">
-                            Mercado de Divisas <span className="text-[var(--primary)] text-shadow">Real-Time</span>
+                            Mercado de <span className="text-[var(--primary)]">Divisas</span>
                         </h2>
-                        <p className="text-gray-400 text-sm max-w-xl">
-                            Cotizaciones integradas de <span className="text-white font-bold">Dolarito</span>, <span className="text-[var(--primary)] font-bold">Buenbit</span> y el mercado oficial.
-                            Datos sincronizados minuto a minuto.
+                        <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest">
+                            Datos Live • <span className="text-white">Dolarito</span> & <span className="text-[var(--primary)]">Buenbit</span>
                         </p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full self-start md:self-end">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Conexión Live</span>
+                <div className="flex items-center gap-2 bg-[var(--primary)]/10 border border-[var(--primary)]/20 px-4 py-2 rounded-full self-start md:self-end">
+                    <div className="w-2 h-2 bg-[var(--primary)] rounded-full animate-pulse" />
+                    <span className="text-[10px] font-black text-[var(--primary)] uppercase tracking-widest">Conexión Live</span>
                 </div>
             </div>
 

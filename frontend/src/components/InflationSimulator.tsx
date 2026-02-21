@@ -64,38 +64,40 @@ export const InflationSimulator = () => {
     return (
         <div className="grid lg:grid-cols-3 gap-8">
             {/* Panel de Inputs */}
-            <Card className="lg:col-span-1 space-y-6 bg-black/40">
+            <Card className="lg:col-span-1 space-y-6 bg-[#161616] border-white/5">
                 <div className="flex items-center gap-3 mb-6">
-                    <Calculator className="text-[var(--primary)] h-6 w-6" />
-                    <h3 className="text-xl font-bold text-white">Tus Datos</h3>
+                    <div className="p-2 bg-[var(--primary)]/10 rounded-xl">
+                        <Calculator className="text-[var(--primary)] h-6 w-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white tracking-tight">Tus Datos</h3>
                 </div>
 
                 <div className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-1">Ingreso Mensual (ARS)</label>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Ingreso Mensual (ARS)</label>
                         <input
                             type="number"
                             value={income || ''}
                             onChange={(e) => setIncome(e.target.value === '' ? 0 : Number(e.target.value))}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--primary)] transition-colors"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-[var(--primary)] transition-all font-medium text-lg"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-1">Gastos Fijos (ARS)</label>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Gastos Fijos (ARS)</label>
                         <input
                             type="number"
                             value={fixedExpenses || ''}
                             onChange={(e) => setFixedExpenses(e.target.value === '' ? 0 : Number(e.target.value))}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--primary)] transition-colors"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-[var(--primary)] transition-all font-medium text-lg"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-1">Gastos Variables (ARS)</label>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Gastos Variables (ARS)</label>
                         <input
                             type="number"
                             value={variableExpenses || ''}
                             onChange={(e) => setVariableExpenses(e.target.value === '' ? 0 : Number(e.target.value))}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[var(--primary)] transition-colors"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-[var(--primary)] transition-all font-medium text-lg"
                         />
                     </div>
                     <div>
@@ -106,7 +108,7 @@ export const InflationSimulator = () => {
                                 <span className="text-[10px] text-gray-500 uppercase tracking-wider">Dato Oficial INDEC</span>
                             </div>
                         </label>
-                        <div className="p-3 bg-[var(--accent)]/5 border border-[var(--accent)]/20 rounded-xl text-xs text-gray-400 leading-relaxed italic">
+                        <div className="p-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-gray-400 leading-relaxed italic uppercase tracking-tighter">
                             El valor de inflación se ha fijado según el último reporte oficial del INDEC para garantizar proyecciones precisas.
                         </div>
                     </div>
@@ -124,8 +126,8 @@ export const InflationSimulator = () => {
                     {/* Resumen */}
                     <div className="flex flex-col justify-center space-y-6">
                         <div>
-                            <p className="text-gray-400 text-sm mb-1">Pérdida mensual en pesos reales</p>
-                            <p className="text-4xl font-black text-[var(--accent)] glow-accent-text">
+                            <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Pérdida mensual en pesos reales</p>
+                            <p className="text-5xl font-black text-[var(--accent)] tabular-nums italic">
                                 -${currentLoss.toLocaleString('es-AR')}
                             </p>
                         </div>
@@ -135,9 +137,9 @@ export const InflationSimulator = () => {
                                 -${(currentLoss * 12).toLocaleString('es-AR')}
                             </p>
                         </div>
-                        <div className="p-4 rounded-xl bg-[var(--accent)]/10 border border-[var(--accent)]/20">
-                            <p className="text-[var(--foreground)] text-sm">
-                                Tu poder adquisitivo se reduce un <span className="text-[var(--accent)] font-bold">{lossPercent}%</span> cada mes si tus ingresos no acompañan la inflación.
+                        <div className="p-5 rounded-2xl bg-[#161616] border border-white/5">
+                            <p className="text-gray-400 text-sm leading-relaxed">
+                                Tu poder adquisitivo se reduce un <span className="text-[var(--accent)] font-bold text-lg">{lossPercent}%</span> cada mes si tus ingresos no acompañan la inflación.
                             </p>
                         </div>
                     </div>
