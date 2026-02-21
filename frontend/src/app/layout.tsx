@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${inter.variable} dark`}>
-      <body className="font-sans bg-[#0B0F19] text-white antialiased flex flex-col min-h-screen selection:bg-[var(--primary)] selection:text-black">
+      <body className="font-sans bg-[#0E0E0E] text-white antialiased flex flex-col min-h-screen selection:bg-[var(--primary)] selection:text-black">
         <Header />
         <main className="flex-grow">
           {children}
